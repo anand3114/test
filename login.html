@@ -1,79 +1,56 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Login - CBEE Attendance</title>
-</head>
-<body>
-  <h2>Student / Admin Login</h2>
-  <input type="email" id="email" placeholder="Email" required />
-  <input type="password" id="password" placeholder="Password" required />
-  <button onclick="login()">Login</button>
-  <button onclick="register()">Register</button>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+  const firebaseConfig = {
+    apiKey: "AIzaSyD78cdZ6ndDgFfT_npwvGobKLqFMqianT0",
+    authDomain: "cbee-attendance.firebaseapp.com",
+    projectId: "cbee-attendance",
+    storageBucket: "cbee-attendance.firebasestorage.app",
+    messagingSenderId: "696219696228",
+    appId: "1:696219696228:web:daa16d9ab486a52f44b371",
+    measurementId: "G-J1LYP2HL3S"
+  };
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyD78cdZ6ndDgFfT_npwvGobKLqFMqianT0",
-      authDomain: "cbee-attendance.firebaseapp.com",
-      projectId: "cbee-attendance",
-      storageBucket: "cbee-attendance.firebasestorage.app",
-      messagingSenderId: "696219696228",
-      appId: "1:696219696228:web:daa16d9ab486a52f44b371",
-      measurementId: "G-J1LYP2HL3S"
-    };
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+  window.register = function () {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(() => alert("Registered successfully! Now login."))
+      .catch((error) => alert(error.message));
+  }
 
-    // Helper to validate email
-    function isValidEmail(email) {
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    }
+  window.login = function () {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
 
-    window.register = function () {
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
+    signInWithEmailAndPassword(auth, email, password)
+      .then(async (userCredential) => {
+        const uid = userCredential.user.uid;
+        console.log("Logged in UID:", uid);
 
-      if (!isValidEmail(email)) {
-        alert("Please enter a valid email.");
-        return;
-      }
-      if (password.length < 6) {
-        alert("Password must be at least 6 characters.");
-        return;
-      }
+        const docRef = doc(db, "roles", uid);
+        const docSnap = await getDoc(docRef);
 
-      createUserWithEmailAndPassword(auth, email, password)
-        .then(() => alert("Registered successfully! Now login."))
-        .catch((error) => alert(error.message));
-    }
-
-    window.login = function () {
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
-
-      signInWithEmailAndPassword(auth, email, password)
-        .then(async (userCredential) => {
-          const uid = userCredential.user.uid;
-
-          // Check if user is admin
-          const docRef = doc(db, "roles", uid);
-          const docSnap = await getDoc(docRef);
-
-          if (docSnap.exists() && docSnap.data().role === "admin") {
+        if (docSnap.exists()) {
+          console.log("Role found:", docSnap.data().role);
+          if (docSnap.data().role === "admin") {
             alert("Welcome Admin!");
             window.location.href = "admin.html";
           } else {
             alert("Welcome Student!");
             window.location.href = "attendance.html";
           }
-        })
-        .catch((error) => alert(error.message));
-    }
-  </script>
-</body>
-</html>
+        } else {
+          console.log("No role found, redirecting as student");
+          window.location.href = "attendance.html";
+        }
+      })
+      .catch((error) => alert(error.message));
+  }
+</script>
