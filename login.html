@@ -1,4 +1,16 @@
-<script type="module">
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login - CBEE Attendance</title>
+</head>
+<body>
+  <h2>Student / Admin Login</h2>
+  <input type="email" id="email" placeholder="Email" required />
+  <input type="password" id="password" placeholder="Password" required />
+  <button onclick="login()">Login</button>
+  <button onclick="register()">Register</button>
+
+  <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
   import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
   import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
@@ -54,3 +66,6 @@
       .catch((error) => alert(error.message));
   }
 </script>
+
+</body>
+</html>
