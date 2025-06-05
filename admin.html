@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard</title>
+</head>
+<body>
+  <h2>All Attendance Records</h2>
+  <div id="records"></div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD78cdZ6ndDgFfT_npwvGobKLqFMqianT0",
+      authDomain: "cbee-attendance.firebaseapp.com",
+      projectId: "cbee-attendance",
+      storageBucket: "cbee-attendance.firebasestorage.app",
+      messagingSenderId: "696219696228",
+      appId: "1:696219696228:web:daa16d9ab486a52f44b371",
+      measurementId: "G-J1LYP2HL3S"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    const ADMIN_EMAILS = ["anand31145@gmail.com"]; // replace with your actual admin email
+
+    onAuthStateChanged(auth, async user => {
+      if (!user || !ADMIN_EMAILS.includes(user.email)) {
+        alert("Access denied. You are not an admin.");
+        window.location.href = "login.html";
+        return;
+      }
+
+      const snapshot = await getDocs(collection(db, "attendance"));
+      const container = document.getElementById("records");
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        const div = document.createElement("div");
+        div.innerHTML = `
+          <p><strong>Name:</strong> ${data.name}</p>
+          <p><strong>Roll:</strong> ${data.roll}</p>
+          <p><strong>Subject:</strong> ${data.subject}</p>
+          <p><strong>Date:</strong> ${data.date}</p>
+          <hr/>
+        `;
+        container.appendChild(div);
+      });
+    });
+  </script>
+</body>
+</html>

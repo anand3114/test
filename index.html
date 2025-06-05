@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chemical Engineering</title>
+
+  <!-- ✅ Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G4SVTBNYY4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G4SVTBNYY4', {
+      'page_title': 'Home Page',
+      'page_path': '/index.html'
+    });
+  </script>
+
+  <style>
+    :root {
+      --bg-light: #f5f5f5;
+      --bg-dark: #1e1e2f;
+      --text-light: #333;
+      --text-dark: #f1f1f1;
+      --card-light: #fff;
+      --card-dark: #2a2a3c;
+      --blue: #007bff;
+      --blue-dark: #0056b3;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-light);
+      overflow-x: hidden;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    body.dark-mode {
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      background-color: var(--card-light);
+      padding: 20px;
+      font-weight: 600;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      flex-wrap: wrap;
+    }
+
+    body.dark-mode nav {
+      background-color: var(--card-dark);
+    }
+
+    nav a {
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+    }
+
+    nav a.active::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background-color: var(--blue);
+      border-radius: 2px;
+    }
+
+    nav a:hover {
+      color: var(--blue);
+    }
+
+    .toggle-mode {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 10px 14px;
+      border-radius: 50%;
+      background: var(--blue);
+      color: white;
+      border: none;
+      cursor: pointer;
+      z-index: 1000;
+      font-size: 16px;
+    }
+
+    @media (max-width: 768px) {
+      .toggle-mode {
+        bottom: 15px;
+        right: 15px;
+        padding: 8px 10px;
+        font-size: 14px;
+      }
+    }
+
+    .hero {
+      position: relative;
+      width: 100vw;
+      height: 400px;
+      overflow: hidden;
+    }
+
+    .hero-slider {
+      display: flex;
+      height: 100%;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    .hero-slide {
+      width: 100vw;
+      height: 100%;
+      flex-shrink: 0;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+    }
+
+    .hero-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 2rem;
+      text-align: center;
+      z-index: 2;
+      padding: 0 20px;
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
+    }
+
+    .dots {
+      position: absolute;
+      bottom: 15px;
+      width: 100%;
+      text-align: center;
+      z-index: 4;
+    }
+
+    .dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      margin: 0 5px;
+      background-color: rgba(255, 255, 255, 0.7);
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .dot.active {
+      background-color: white;
+    }
+
+    .students-section {
+      background-color: var(--card-light);
+      padding: 50px 20px;
+      text-align: center;
+      transition: background 0.3s;
+    }
+
+    body.dark-mode .students-section {
+      background-color: var(--card-dark);
+    }
+
+    .students-section h2 {
+      font-size: 1.8rem;
+      margin-bottom: 30px;
+    }
+
+    .student-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+    }
+
+    .student-card {
+      background-color: var(--card-light);
+      border-radius: 10px;
+      padding: 15px;
+      width: 180px;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    }
+
+    body.dark-mode .student-card {
+      background-color: var(--card-dark);
+    }
+
+    .student-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      background-color: #e0f0ff;
+    }
+
+    body.dark-mode .student-card:hover {
+      background-color: #32405b;
+    }
+
+    .student-card img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 10px;
+      border: 3px solid #eee;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .see-more {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--blue);
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .see-more:hover {
+      color: var(--blue-dark);
+    }
+
+    footer {
+      background-color: #050505;
+      text-align: center;
+      padding: 30px 20px;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+
+    @media (max-width: 768px) {
+      .student-grid {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 🌗 Dark Mode Toggle -->
+  <button class="toggle-mode" onclick="toggleMode()">🌗</button>
+
+  <!-- ✅ Navbar -->
+  <nav>
+    <a href="#" class="active">HOME</a>
+    <a href="students.html">OUR STUDENTS</a>
+    <a href="usefulllink.html">USEFUL LINKS</a>
+    <a href="studymaterial.html">STUDY MATERIAL</a>
+    <a href="suggestion.html">SUGGESTIONS</a>
+  </nav>
+
+  <!-- 🎯 Hero Section -->
+  <div class="hero" id="hero">
+    <div class="hero-slider" id="slider">
+      <div class="hero-slide" style="background-image: url('1.jpg');">
+        <div class="hero-overlay"></div>
+        <div class="hero-text">Welcome to the Chemical Engineering Family IIT Patna</div>
+      </div>
+      <div class="hero-slide" style="background-image: url('images/3.jpg');">
+        <div class="hero-overlay"></div>
+        <div class="hero-text">Explore. Learn. Innovate. Together We Grow!</div>
+      </div>
+    </div>
+    <div class="dots">
+      <span class="dot active" onclick="goToSlide(0)"></span>
+      <span class="dot" onclick="goToSlide(1)"></span>
+    </div>
+  </div>
+
+  <!-- 🧑‍🎓 Students/Gallery -->
+  <section class="students-section">
+    <h2>OUR GALLERY</h2>
+    <div class="student-grid">
+      <div class="student-card"><img src="images/Anand.jpg" alt="Anand"><div>Anand</div></div>
+      <div class="student-card"><img src="images/adarsh.jpg" alt="Adarsh"><div>Adarsh</div></div>
+      <div class="student-card"><img src="images/nittin.jpg" alt="Nittin"><div>Nittin</div></div>
+      <div class="student-card"><img src="images/anurag.jpg" alt="Anurag"><div>Anurag</div></div>
+      <!-- Hidden cards here -->
+      <div class="student-card hidden"><img src="images/sagar.png" alt="Sagar Kumar"><div>Sagar Kumar</div></div>
+     <div class="student-card hidden"><img src="images/sneha.jpg" alt="Student"><div>Sneha Sinha</div></div>
+      <div class="student-card hidden"><img src="pranay.jpg" alt="Student"><div>Pranay Dev</div></div>
+      <div class="student-card hidden"><img src="images/srijan.jpg" alt="Student"><div>Srijan Sharma</div></div>
+      <div class="student-card hidden"><img src="images/shivanshu.jpg" alt="Student"><div>Shivanshu Verma</div></div>
+      <div class="student-card hidden"><img src="images/aanushka.jpeg" alt="Student"><div>Aanushka Saha</div></div>
+      <div class="student-card hidden"><img src="images/susanth.jpg" alt="Student"><div>Susanth Badiganti</div></div>
+    <div class="student-card hidden"><img src="images/vaibhav.png" alt="Student"><div>Vaibhav</div></div>
+      <div class="student-card hidden"><img src="images/dhairya.jpg" alt="Student"><div>Dhairya Garg</div></div>
+      <div class="student-card hidden"><img src="images/saksham.png" alt="Student"><div>Saksham Thakur</div></div>
+      <div class="student-card hidden"><img src="images/suhas.jpg" alt="Student"><div>Sama Narasimha Suhas</div></div>
+      <div class="student-card hidden"><img src="images/Aryan.jpg" alt="Student"><div>Aryan Jain</div></div>
+      <div class="student-card hidden"><img src="images/jay.jpg" alt="Student"><div>Jay Girase </div></div>
+      <div class="student-card hidden"><img src="images/hatim.jpg" alt="Student"><div>Hatim Ali Jukkerwala</div></div>
+      <div class="student-card hidden"><img src="images/devyansh.jpg" alt="Student"><div>Devyansh Pandey </div></div>
+      <div class="student-card hidden"><img src="images/narain.png" alt="Student"><div>Narain Singh </div></div>
+      <div class="student-card hidden"><img src="images/aditi.jpg" alt="Student"><div>Aditi Lohiya</div></div>
+      <div class="student-card hidden"><img src="images/varshith.jpg" alt="Student"><div>Anugu Varshith Reddy </div></div>
+      <div class="student-card hidden"><img src="images/daspiyush.jpg" alt="Student"><div>Das Piyush </div></div>
+      <div class="student-card hidden"><img src="images/shashwat.jpg" alt="Student"><div>Shashwat Tiwari </div></div>
+      <div class="student-card hidden"><img src="images/Abdur.jpg" alt="Student"><div>Abdur Rehman Ayaz </div></div>
+      <div class="student-card hidden"><img src="images/jatin.jpg" alt="Student"><div>Jatin Khurana </div></div>
+      <div class="student-card hidden"><img src="images/joven.jpg" alt="Student"><div>Joven Sony </div></div>
+      <div class="student-card hidden"><img src="images/shubham.jpg" alt="Student"><div>Shubham </div></div>
+      <div class="student-card hidden"><img src="images/iman.jpg" alt="Student"><div>Iman Adhikary </div></div>
+      <div class="student-card hidden"><img src="images/vishal.jpg" alt="Student"><div>Vishal Singh </div></div>
+      <div class="student-card hidden"><img src="images/shristhi.jpg" alt="Student"><div>Shrishti Gupta </div></div>
+      <div class="student-card hidden"><img src="images/devyani.jpg" alt="Student"><div>Devyani Mude </div></div>
+      <div class="student-card hidden"><img src="images/nikhil.jpg" alt="Student"><div>Sai Nikhil </div></div>
+      <div class="student-card hidden"><img src="images/komal.jpg" alt="Student"><div>komal Kumari </div></div>
+      <div class="student-card hidden"><img src="images/shorya.jpg" alt="Student"><div>Shorya Pratap Singh</div></div>
+      <div class="student-card hidden"><img src="images/sandeep.jpg" alt="Student"><div>Sandeep Sisodiya </div></div>
+      <div class="student-card hidden"><img src="images/pragya.jpg" alt="Student"><div>Pragya Paliwal </div></div>
+      <div class="student-card hidden"><img src="images/pranil.gif" alt="Student"><div>Pranil Agrawal </div></div>
+      <div class="student-card hidden"><img src="images/aniket.jpg" alt="Student"><div>Aniket Kumar </div></div>
+      <div class="student-card hidden"><img src="images/namita.jpeg" alt="Student"><div>Namita Nigom </div></div>
+      <div class="student-card hidden"><img src="images/pranjal.jpg" alt="Student"><div>Pranjal Sutradhar </div></div>
+   
+    </div>
+    <div style="text-align: right; margin-top: 20px;">
+      <span class="see-more" onclick="showMoreStudents()">See More</span>
+    </div>
+  </section>
+
+  <!-- 📩 Footer -->
+  <footer>
+    <p>Designed by Anand <br>Contact: anand31145@gmail.com</p>
+  </footer>
+
+  <!-- 🎬 Scripts -->
+  <script>
+    const slider = document.getElementById('slider');
+    const dots = document.querySelectorAll('.dot');
+    const totalSlides = slider.children.length;
+    let currentSlide = 0;
+
+    function showSlide(i) {
+      currentSlide = i;
+      slider.style.transform = `translateX(-${i * 100}vw)`;
+      dots.forEach(dot => dot.classList.remove('active'));
+      dots[i].classList.add('active');
+    }
+
+    function nextSlide() {
+      currentSlide = (currentSlide + 1) % totalSlides;
+      showSlide(currentSlide);
+    }
+
+    function goToSlide(i) {
+      showSlide(i);
+    }
+
+    setInterval(nextSlide, 3000);
+
+    document.getElementById('hero').addEventListener('touchstart', (e) => startX = e.touches[0].clientX);
+    document.getElementById('hero').addEventListener('touchend', (e) => {
+      const diff = startX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 50) {
+        currentSlide = (diff > 0) ? (currentSlide + 1) % totalSlides : (currentSlide - 1 + totalSlides) % totalSlides;
+        showSlide(currentSlide);
+      }
+    });
+
+    function showMoreStudents() {
+      document.querySelectorAll('.student-card.hidden').forEach(card => card.classList.remove('hidden'));
+      document.querySelector('.see-more').style.display = 'none';
+    }
+
+    function toggleMode() {
+      document.body.classList.toggle('dark-mode');
+    }
+  </script>
+
+</body>
+</html>

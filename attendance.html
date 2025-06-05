@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mark Attendance</title>
+</head>
+<body>
+  <h2>Attendance Form</h2>
+  <input type="text" id="name" placeholder="Name" required />
+  <input type="text" id="roll" placeholder="Roll Number" required />
+  <input type="text" id="subject" placeholder="Subject" required />
+  <button onclick="markAttendance()">Submit Attendance</button>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, query, where, getDocs, Timestamp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD78cdZ6ndDgFfT_npwvGobKLqFMqianT0",
+      authDomain: "cbee-attendance.firebaseapp.com",
+      projectId: "cbee-attendance",
+      storageBucket: "cbee-attendance.firebasestorage.app",
+      messagingSenderId: "696219696228",
+      appId: "1:696219696228:web:daa16d9ab486a52f44b371",
+      measurementId: "G-J1LYP2HL3S"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    let currentUser;
+
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        currentUser = user;
+      } else {
+        alert("Not logged in. Redirecting...");
+        window.location.href = "login.html";
+      }
+    });
+
+    window.markAttendance = async function () {
+      const name = document.getElementById("name").value;
+      const roll = document.getElementById("roll").value;
+      const subject = document.getElementById("subject").value;
+      const today = new Date().toDateString();
+
+      const q = query(collection(db, "attendance"),
+        where("uid", "==", currentUser.uid),
+        where("date", "==", today)
+      );
+
+      const snap = await getDocs(q);
+      if (!snap.empty) {
+        alert("You already marked attendance today.");
+        return;
+      }
+
+      await addDoc(collection(db, "attendance"), {
+        uid: currentUser.uid,
+        email: currentUser.email,
+        name,
+        roll,
+        subject,
+        date: today,
+        timestamp: Timestamp.now()
+      });
+
+      alert("Attendance marked successfully!");
+    }
+  </script>
+</body>
+</html>

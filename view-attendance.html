@@ -1,0 +1,16 @@
+<div id="attendanceList"></div>
+
+<script>
+  const db = firebase.firestore();
+
+  db.collection("attendance")
+    .orderBy("timestamp", "desc")
+    .onSnapshot((snapshot) => {
+      const list = document.getElementById("attendanceList");
+      list.innerHTML = ""; // clear list
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        list.innerHTML += `<p>${data.name} (${data.roll}) - ${new Date(data.timestamp.toDate()).toLocaleString()}</p>`;
+      });
+    });
+</script>

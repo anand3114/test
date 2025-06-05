@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login</title>
+</head>
+<body>
+  <h2>Student Login / Register</h2>
+  <input type="email" id="email" placeholder="Email" required />
+  <input type="password" id="password" placeholder="Password" required />
+  <button onclick="login()">Login</button>
+  <button onclick="register()">Register</button>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD78cdZ6ndDgFfT_npwvGobKLqFMqianT0",
+      authDomain: "cbee-attendance.firebaseapp.com",
+      projectId: "cbee-attendance",
+      storageBucket: "cbee-attendance.firebasestorage.app",
+      messagingSenderId: "696219696228",
+      appId: "1:696219696228:web:daa16d9ab486a52f44b371",
+      measurementId: "G-J1LYP2HL3S"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    window.register = function () {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      createUserWithEmailAndPassword(auth, email, password)
+        .then(() => alert("Registered successfully!"))
+        .catch((error) => alert(error.message));
+    }
+
+    window.login = function () {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          alert("Login successful!");
+          window.location.href = "attendance.html";
+        })
+        .catch((error) => alert(error.message));
+    }
+  </script>
+</body>
+</html>
